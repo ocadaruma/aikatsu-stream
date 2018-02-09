@@ -13,17 +13,16 @@ function buildUrl(tune) {
 function pollTuneEnd(tabId, tune, tuneIndex) {
 
   timer = setTimeout(function () {
-    chrome.tabs.sendMessage(tabId, { action: "QUERY", query: "CURRENT_TIME" }, function (responseMessage) {
+    chrome.tabs.sendMessage(tabId, { action: "AIKATSU_QUERY", query: "CURRENT_TIME" }, function (responseMessage) {
       if (responseMessage) {
         if (responseMessage.currentTime <= tune.end) {
           pollTuneEnd(tabId, tune, tuneIndex);
         } else {
-
           if (tuneIndex < PLAYLIST.length - 1) {
             var nextIndex = tuneIndex + 1;
 
             clearTimeout(timer);
-            chrome.tabs.update(tabId, {url: buildUrl(PLAYLIST[nextIndex])}, function () {
+            chrome.tabs.update(tabId, { url: buildUrl(PLAYLIST[nextIndex]) }, function () {
               currentTuneIndex = nextIndex;
               pollTuneEnd(tabId, PLAYLIST[nextIndex], nextIndex);
             });
@@ -58,7 +57,13 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         pollTuneEnd(tabId, PLAYLIST[currentTuneIndex], currentTuneIndex);
       });
     }
-  } else if (message.action === "CLOSE") {
+  }
+});
+
+// clean up
+chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+  if (tabId === currentTabId) {
+    clearTimeout(timer);
     currentTabId = -1;
   }
 });

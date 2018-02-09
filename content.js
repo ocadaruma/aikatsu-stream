@@ -1,12 +1,11 @@
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
-  if (message.action === 'QUERY') {
+  if (message.action === 'AIKATSU_QUERY') {
     if (message.query === 'CURRENT_TIME') {
-      sendResponse({ currentTime: document.getElementById("video").currentTime });
+
+      var video = document.getElementById("video");
+      sendResponse({ currentTime: video ? video.currentTime : -1 });
     }
   }
+  return true;
 });
-
-window.onunload = function () {
-  chrome.runtime.sendMessage({ action: "CLOSE" });
-};

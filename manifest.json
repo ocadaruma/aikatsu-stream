@@ -1,15 +1,15 @@
 {
   "manifest_version": 2,
-  "name": "aikatsu-stream",
+  "name": "AIKATSU! STREAM",
   "version": "1.0",
-  "description": "AIKATSU!",
+  "description": "dアニメストアで配信されているアイカツ！のライブシーンだけを次々と再生します",
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon128.png"
   },
   "background": {
-    "persistent": false,
+    "persistent": true,
     "scripts": [
       "playlist.js",
       "background.js"
@@ -33,7 +33,7 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
-      "run_at": "document_end"
+      "run_at": "document_start"
     }
   ]
 }
