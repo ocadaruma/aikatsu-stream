@@ -3,6 +3,7 @@
 ////////////////
 var currentTuneIndex = 0;
 var currentTabId = -1;
+var timer;
 
 function buildUrl(tune) {
   return "https://anime.dmkt-sp.jp/animestore/sc_d_pc?partId=" + tune.partId +
@@ -10,7 +11,7 @@ function buildUrl(tune) {
 }
 
 function pollTuneEnd(tabId, tune, tuneIndex) {
-  var timer;
+
   timer = setTimeout(function () {
     chrome.tabs.sendMessage(tabId, { action: "QUERY", query: "CURRENT_TIME" }, function (responseMessage) {
       if (responseMessage) {
